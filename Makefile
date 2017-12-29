@@ -1,7 +1,7 @@
 ifneq ($(KERNELRELEASE),)
-	obj-m := regmap_pfn_kmalloc.o
-	obj-m += regmap_pfn_vmalloc.o
-	obj-m += regmap_pfn_alloc_pages.o
+	obj-m := remap_pfn_kmalloc.o
+	obj-m += remap_pfn_vmalloc.o
+	obj-m += remap_pfn_alloc_pages.o
 else
 	PWD := $(shell pwd)
 	KERNELDIR ?= $(PWD)/../../linux-4.10.17
