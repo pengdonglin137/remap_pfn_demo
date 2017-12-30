@@ -1,0 +1,62 @@
+[root@vexpress mnt]# ./user_2
+I am ./user_1
+
+[ 2545.832903] client: user_2 (873)
+[ 2545.833087] code  section: [0x8000   0x87e0]
+[ 2545.833178] data  section: [0x107e0   0x10918]
+[ 2545.833262] brk   section: s: 0x11000, c: 0x11000
+[ 2545.833346] mmap  section: s: 0xb6fb5000
+[ 2545.833423] stack section: s: 0xbea0ee20
+[ 2545.833499] arg   section: [0xbea0ef23   0xbea0ef2c]
+[ 2545.833590] env   section: [0xbea0ef2c   0xbea0eff3]
+[ 2545.833761] phy: 0x8eb60000, offset: 0x0, size: 0x10000
+[ 2545.833900] remap_pfn_mmap: map 0xeeb60000 to 0xb6e13000, size: 0x10000
+
+[root@vexpress mnt]# cat /proc/873/maps 
+00008000-00009000 r-xp 00000000 00:12 1179665    /mnt/user_2
+00010000-00011000 rw-p 00000000 00:12 1179665    /mnt/user_2
+b6e13000-b6e23000 rw-s 00000000 00:10 8765       /dev/remap_pfn
+b6e23000-b6f56000 r-xp 00000000 b3:01 143        /lib/libc-2.18.so
+b6f56000-b6f5d000 ---p 00133000 b3:01 143        /lib/libc-2.18.so
+b6f5d000-b6f5f000 r--p 00132000 b3:01 143        /lib/libc-2.18.so
+b6f5f000-b6f60000 rw-p 00134000 b3:01 143        /lib/libc-2.18.so
+b6f60000-b6f63000 rw-p 00000000 00:00 0 
+b6f63000-b6f84000 r-xp 00000000 b3:01 188        /lib/libgcc_s.so.1
+b6f84000-b6f8b000 ---p 00021000 b3:01 188        /lib/libgcc_s.so.1
+b6f8b000-b6f8c000 rw-p 00020000 b3:01 188        /lib/libgcc_s.so.1
+b6f8c000-b6fac000 r-xp 00000000 b3:01 165        /lib/ld-2.18.so
+b6fb0000-b6fb3000 rw-p 00000000 00:00 0 
+b6fb3000-b6fb4000 r--p 0001f000 b3:01 165        /lib/ld-2.18.so
+b6fb4000-b6fb5000 rw-p 00020000 b3:01 165        /lib/ld-2.18.so
+be9ee000-bea0f000 rw-p 00000000 00:00 0          [stack]
+beedf000-beee0000 r-xp 00000000 00:00 0          [sigpage]
+beee0000-beee1000 r--p 00000000 00:00 0          [vvar]
+beee1000-beee2000 r-xp 00000000 00:00 0          [vdso]
+ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]
+[root@vexpress mnt]# 
+[root@vexpress mnt]# pmap -x 873
+873: {no such process} ./user_2
+Address	  Kbytes     PSS   Dirty    Swap  Mode  Mapping
+00008000       4       4       0       0  r-xp  /mnt/user_2
+00010000       4       4       4       0  rw-p  /mnt/user_2
+b6e13000      64       0       0       0  rw-s  /dev/remap_pfn
+b6e23000    1228     452       0       0  r-xp  /lib/libc-2.18.so
+b6f56000      28       0       0       0  ---p  /lib/libc-2.18.so
+b6f5d000       8       8       8       0  r--p  /lib/libc-2.18.so
+b6f5f000       4       4       4       0  rw-p  /lib/libc-2.18.so
+b6f60000      12       8       8       0  rw-p    [ anon ]
+b6f63000     132      64       0       0  r-xp  /lib/libgcc_s.so.1
+b6f84000      28       0       0       0  ---p  /lib/libgcc_s.so.1
+b6f8b000       4       4       4       0  rw-p  /lib/libgcc_s.so.1
+b6f8c000     128     122       0       0  r-xp  /lib/ld-2.18.so
+b6fb0000      12      12      12       0  rw-p    [ anon ]
+b6fb3000       4       4       4       0  r--p  /lib/ld-2.18.so
+b6fb4000       4       4       4       0  rw-p  /lib/ld-2.18.so
+be9ee000     132       4       4       0  rw-p  [stack]
+beedf000       4       0       0       0  r-xp  [sigpage]
+beee0000       4       0       0       0  r--p  [vvar]
+beee1000       4       0       0       0  r-xp  [vdso]
+ffff0000       4       0       0       0  r-xp  [vectors]
+--------  ------  ------  ------  ------
+total	    1812     694      52       0
+
