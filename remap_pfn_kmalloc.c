@@ -28,7 +28,16 @@ static int remap_pfn_open(struct inode *inode, struct file *file)
 
 static int remap_pfn_mmap(struct file *file, struct vm_area_struct *vma)
 {
-	unsigned long offset = vma->vm_pgoff << PAGE_SHIFT;
+	// For efficiency reasons,
+	// 	the virtual address space is divided into user space and kernel
+	// 		space.For the same reason,
+	// 	the kernel space contains a memory mapped zone, called lowmem,
+	// 	which is contiguously mapped in physical memory,
+	// 	starting from the lowest possible physical address(usually 0)
+	// 		.The virtual address where lowmem is mapped is defined
+	// 			by PAGE_OFFSET.
+
+	unsigned long offset = vma->vm_pgoff << PAGE_SHIFT;//这里的offset是应用程序传的，传给作为内核虚拟地址PAGE_OFFSET用，即kernel虚拟地址->start用
 	unsigned long pfn_start = (virt_to_phys(kbuff) >> PAGE_SHIFT) + vma->vm_pgoff;
 	unsigned long virt_start = (unsigned long)kbuff + offset;
 	unsigned long size = vma->vm_end - vma->vm_start;
